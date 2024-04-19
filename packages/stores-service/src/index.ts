@@ -1,8 +1,11 @@
 import { createSchema, createYoga } from 'graphql-yoga';
 import { readFileSync } from 'node:fs';
 import { createServer } from 'node:http';
+import { buildSubgraphSchema } from '@apollo/subgraph'; 
+import { gql } from 'graphql-tag'; 
 
-const schema = readFileSync('schema.graphql', 'utf-8');
+// const schema = gql(readFileSync('schema.graphql', 'utf-8'));
+const typeDefs = gql(readFileSync('./schema.graphql', { encoding: 'utf-8' }));
 
 const stores = [
   {
@@ -58,11 +61,12 @@ const resolvers = {
 };
 
 // Create your server
-const yoga = createYoga({
-  schema: createSchema({
-    typeDefs: schema,
-    resolvers,
-  }),
+const yoga = createYoga({ 
+  schema: buildSubgraphSchema ({ typeDefs, resolvers, }) 
+  // schema: createSchema({
+  //   typeDefs: schema,
+  //   resolvers,
+  // }),
 });
 
 const server = createServer(yoga)
