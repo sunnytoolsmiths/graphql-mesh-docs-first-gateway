@@ -1860,6 +1860,9 @@ binary-extensions@^2.0.0:
   dependencies:
     fets "^0.4.12"
 
+"booksgraphQL-service@file:/Users/sunnyxia/Desktop/Startup/Expriment/graphql-mesh-docs-first-gateway/packages/booksgraphQL-service ":
+  resolved "file:packages/booksgraphQL-service"
+
 brace-expansion@^1.1.7:
   version "1.1.11"
   resolved "https://registry.npmjs.org/brace-expansion/-/brace-expansion-1.1.11.tgz"
@@ -4065,6 +4068,7 @@ ssri@^9.0.0:
   dependencies:
     "@apollo/subgraph" "^2.7.3"
     graphql "^16.7.1"
+    graphql-tag "^2.12.6"
     graphql-yoga "4.0.4"
 
 streamsearch@^1.1.0:

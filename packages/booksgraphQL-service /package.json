@@ -1,0 +1,22 @@
+{
+  "name": "booksgraphQL-service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Charly POLY",
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-node-dev --respawn --transpile-only ./src/index.ts"
+  },
+  "dependencies": {
+    "@apollo/subgraph": "^2.7.3",
+    "@apollo/datasource-rest": "^5.0.2",
+    "graphql": "^16.7.1",
+    "graphql-tag": "^2.12.6",
+    "graphql-yoga": "4.0.4"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.1.6"
+  }
+}
