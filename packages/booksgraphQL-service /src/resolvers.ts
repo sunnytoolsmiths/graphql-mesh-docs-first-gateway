@@ -4,6 +4,10 @@ const resolvers = {
         books: (_, __, { dataSources }) => {
             return dataSources.booksAPI.getMostViewedBooks();
          },
+        
+        book: (_, { id }, { dataSources }) => {
+            return dataSources.booksAPI.getBook(id);
+         },
     }
 };
 
