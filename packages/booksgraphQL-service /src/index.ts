@@ -5,40 +5,16 @@ import { createServer } from 'node:http';
 import { buildSubgraphSchema } from '@apollo/subgraph'; 
 import { gql } from 'graphql-tag'; 
 
+const { ApolloServer } = require('@apollo/server');
+const { startStandaloneServer } = require('@apollo/server/standalone');
+
+//const typeDefs = require('./schema.graphql');
+const resolvers = require('./resolvers');
+
 // const schema = gql(readFileSync('schema.graphql', 'utf-8'));
 const typeDefs = gql(readFileSync('./schema.graphql', { encoding: 'utf-8' }));
 
-
-const bookSells = [
-  {
-    bookId: '0',
-    sellsCount: 1932,
-    monthYear: '03/22',
-    __typename: 'Sells',
-    storeId: '0'
-  },
-  {
-    bookId: '1',
-    sellsCount: 192,
-    monthYear: '03/22',
-    __typename: 'Sells',
-    storeId: '0'
-  },
-  {
-    bookId: '0',
-    sellsCount: 2387,
-    monthYear: '03/22',
-    __typename: 'Sells',
-    storeId: '1'
-  },
-  {
-    bookId: '1',
-    sellsCount: 283,
-    monthYear: '03/22',
-    __typename: 'Sells',
-    storeId: '1'
-  },
-];
+class Book {}
 class BooksAPI extends RESTDataSource {
   override baseURL = 'http://localhost:3002';
 
@@ -53,31 +29,41 @@ class BooksAPI extends RESTDataSource {
         //order_by: 'most_viewed',
       },
     });
-    return []; //data.results;
+    return data.results;
   }
 }
 
-const dataSources = {booksAPI: new BooksAPI(),}
-const resolvers = {
-  Query: {
-    //bookSells: (_p, args) => bookSells.filter(bs => bs.storeId === args.storeId),
-    books: () => {
-      return dataSources.booksAPI.getMostViewedBooks();
-   },
+//highlight-start
+interface ContextValue {
+  dataSources: {
+    booksAPI: BooksAPI;
+    // personalizationAPI: PersonalizationAPI;
+  };
+}
+//highlight-end
+
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+});
+async function startApolloServer() {
+const { url } = await startStandaloneServer(server, {
+  context: async () => {
+    const { cache } = server;
+    return {
+      // We create new instances of our data sources with each request,
+      // passing in our server's cache.
+      //highlight-start
+      dataSources: {
+        booksAPI: new BooksAPI({ cache }),
+        //personalizationAPI: new PersonalizationAPI({ cache }),
+      },
+      //highlight-end
+    };
   },
-};
-
-// Create your server
-const yoga = createYoga({ 
-  schema: buildSubgraphSchema ({ typeDefs, resolvers, }) 
-  // schema: createSchema({
-  //   typeDefs: schema,
-  //   resolvers,
-  // }),
 });
 
-const server = createServer(yoga, )
+console.log(`🚀  Server ready at ${url}`);
+}
 
-server.listen(4000, () => {
-  console.log(`🚀 Server ready at http://localhost:4000${yoga.graphqlEndpoint}`);
-});
+startApolloServer();
