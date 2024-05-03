@@ -29,7 +29,7 @@ class BooksAPI extends RESTDataSource {
         //order_by: 'most_viewed',
       },
     });
-    return data.results;
+    return data;//.results;
   }
 }
 
