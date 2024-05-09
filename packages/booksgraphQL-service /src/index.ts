@@ -61,6 +61,7 @@ const { url } = await startStandaloneServer(server, {
       //highlight-end
     };
   },
+  listen: { port: 4040 },
 });
 
 console.log(`🚀  Server ready at ${url}`);
